@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycle Right - Game Center</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo"> 
+            <img src="pictures/RRLogo-transformed.png" alt="Logo">
+        </div>
+        <div class="company-name">Recycle Right</div>
+        <nav>
+            <ul>
+                <li><a href="index.php">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="gamecenter.html">Game Center</a></li>
+                <li><a href="login.html" class="login-button">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+<main>
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Game Center</h1>
+        </div>
+    </section>
+    <a href="#content" class="scroll-down">&#8595;</a>
+    <section id="content" class="content">
+        <div class="text-box full-width">
+            <h2>Entertaining way to learn</h2>
+            <p>If you're looking for games and quizzes related to recycling, 
+                this is the right place!</p>
+        </div>
+        <div class="text-box">
+            <h2>Games</h2>
+            <p>Here you can find games that will help you learn more about recycling.</p>
+            <ul>
+                <li><a href="Game1.php" class="text-box button">Game 1</a></li>
+                <li><a href="game2.php" class="text-box button">Game 2</a></li>
+                <li><a href="#" class="text-box button">Game 3</a></li>
+            </ul>    
+        </div>
+        <div class="text-box">
+            <h2>Quizzes</h2>
+            <p>Test your knowledge about recycling with our quizzes.</p>
+            <ul>
+                <li><a href="#" class="text-box button">Quiz 1</a></li>
+                <li><a href="#" class="text-box button">Quiz 2</a></li>
+                <li><a href="#" class="text-box button">Quiz 3</a></li>
+            </ul> 
+        </div>    
+    </section>
+    
+</main>
+    <footer class="site-footer">
+        <div class="container">
+          <div class="footer-content">
+            <h3>Contact Us</h3>
+            <p>Email: info@recycleright.com</p>
+            <p>Phone: (123) 456-7890</p>
+          </div>
+          <div class="footer-social-media">
+            <h3>Follow Us</h3>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+          </div>
+        </div>
+      </footer>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var scrollDownButton = document.querySelector('.scroll-down');
+            var contentSection = document.querySelector('.content');
+    
+            function toggleScrollButton() {
+                if (contentSection.getBoundingClientRect().top < window.innerHeight) {
+                    scrollDownButton.style.display = 'none';
+                } else {
+                    scrollDownButton.style.display = 'flex';
+                }
+            }
+    
+            window.addEventListener('scroll', toggleScrollButton);
+    
+            // Call the function once on page load to set initial state
+            toggleScrollButton();
+        });
+    </script>
+</body>
+</html>
