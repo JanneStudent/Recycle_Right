@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recycling Sorter Game 2</title>
+    <title>Recycling Sorter Game 3</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -36,15 +36,7 @@
             height: 50px;
             position: absolute;
         }
-        .bins {
-            display: flex;
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            pointer-events: none;
-        }
-        .bin {
+        .garbage-can {
             width: 100px;
             height: 100px;
             border: 2px solid #000;
@@ -53,7 +45,8 @@
             justify-content: center;
             background-color: #fff;
             border-radius: 5px;
-            margin: 0 5px;
+            position: absolute;
+            pointer-events: none;
         }
         #score {
             font-size: 24px;
@@ -95,14 +88,9 @@
 
     <main>
         <div id="gameArea"></div>
-        <div class="bins" id="binsContainer">
-            <div class="bin" id="plasticBin" data-type="plastic">Plastic</div>
-            <div class="bin" id="paperBin" data-type="paper">Paper</div>
-            <div class="bin" id="metalBin" data-type="metal">Metal</div>
-            <div class="bin" id="organicBin" data-type="organic">Organic</div>
-        </div>
         <div id="score">Score: 0</div>
         <div id="timer">Time left: 60s</div>
+        <div class="garbage-can" id="garbageCan">Plastic</div>
     </main>
 
     <div id="gameOver">
@@ -113,7 +101,11 @@
 
     <script>
         let score = 0;
-        let itemSpeed = 2;
+        let timeLeft = 60;
+        let currentType = 'plastic';
+        let previousType = 'plastic';
+        let itemSpawnRate = 1000; // Faster spawn rate
+        let itemVanishTime = 5000; // Shorter vanish time
         const items = [
             { type: 'plastic', src: 'images/bag.png' },
             { type: 'plastic', src: 'images/plastic-cup.png' },
@@ -127,12 +119,10 @@
             { type: 'organic', src: 'images/durian.png' },
             { type: 'organic', src: 'images/fruits.png' },
         ];
-        let timeLeft = 60;
         let gameInterval;
         let timerInterval;
         const gameArea = document.getElementById('gameArea');
-        const binsContainer = document.getElementById('binsContainer');
-        const bins = document.querySelectorAll('.bin');
+        const garbageCan = document.getElementById('garbageCan');
 
         function getRandomItem() {
             return items[Math.floor(Math.random() * items.length)];
@@ -144,26 +134,26 @@
             itemElement.src = item.src;
             itemElement.classList.add('item');
             itemElement.dataset.type = item.type;
-            itemElement.style.left = Math.floor((gameArea.offsetWidth * 0.2) + Math.random() * (gameArea.offsetWidth * 0.6 - 50)) + 'px';
-            itemElement.style.top = '0px';
+            itemElement.style.left = Math.floor(Math.random() * (gameArea.offsetWidth - 50)) + 'px';
+            itemElement.style.top = Math.floor(Math.random() * (gameArea.offsetHeight - 50)) + 'px';
             gameArea.appendChild(itemElement);
 
-            let position = 0;
-            const interval = setInterval(() => {
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    itemElement.remove();
-                } else if (position >= (gameArea.offsetHeight - itemElement.offsetHeight)) {
-                    clearInterval(interval);
-                    itemElement.remove();
-                    score--; // Deduct score for missing item
-                    updateScore();
+            itemElement.onclick = function() {
+                if (itemElement.dataset.type === currentType) {
+                    score++;
                 } else {
-                    position += itemSpeed;
-                    itemElement.style.top = position + 'px';
-                    checkItemCollision(itemElement, interval);
+                    score--;
                 }
-            }, 20);
+                updateScore();
+                itemElement.remove();
+                switchGarbageCan();
+            };
+
+            setTimeout(() => {
+                if (gameArea.contains(itemElement)) {
+                    itemElement.remove();
+                }
+            }, itemVanishTime); // Item disappears after the set vanish time
         }
 
         function updateScore() {
@@ -179,41 +169,43 @@
             } else {
                 timeLeft--;
                 document.getElementById('timer').innerText = 'Time left: ' + timeLeft + 's';
-                if (timeLeft === 30 || timeLeft === 15) {
-                    itemSpeed *= 1.5;
+
+                // Adjust spawn rate and vanish time based on the remaining time
+                if (timeLeft % 15 === 0) {
+                    itemSpawnRate *= 0.9; // Increase spawn rate every 15 seconds
+                    clearInterval(gameInterval);
+                    gameInterval = setInterval(createItem, itemSpawnRate);
+                }
+                if (timeLeft === 30) {
+                    itemVanishTime *= 1.2; // Items vanish slightly slower in the last 30 seconds
                 }
             }
         }
 
-        document.addEventListener('mousemove', function (event) {
-            const mouseX = event.clientX;
-            binsContainer.style.left = (mouseX - binsContainer.offsetWidth / 2) + 'px';
+        document.addEventListener('mousemove', function(event) {
+            garbageCan.style.left = (event.clientX - garbageCan.offsetWidth / 2) + 'px';
+            garbageCan.style.top = (event.clientY - garbageCan.offsetHeight / 2) + 'px';
         });
 
-        function checkItemCollision(item, interval) {
-            const itemRect = item.getBoundingClientRect();
-            bins.forEach(bin => {
-                const binRect = bin.getBoundingClientRect();
-                if (
-                    itemRect.bottom >= binRect.top &&
-                    itemRect.top <= binRect.bottom &&
-                    itemRect.left <= binRect.right &&
-                    itemRect.right >= binRect.left
-                ) {
-                    if (item.dataset.type === bin.dataset.type) {
-                        score++;
-                    } else {
-                        score--;
-                    }
-                    updateScore();
-                    clearInterval(interval); // Stop the item's interval
-                    item.remove(); // Remove the item
-                }
-            });
+        function switchGarbageCan() {
+            const types = ['plastic', 'paper', 'metal', 'organic'];
+            let nextType;
+            do {
+                nextType = types[Math.floor(Math.random() * types.length)];
+            } while (nextType === currentType);
+            previousType = currentType;
+            currentType = nextType;
+            garbageCan.innerText = capitalizeFirstLetter(nextType);
         }
 
-        gameInterval = setInterval(createItem, 2000);
-        timerInterval = setInterval(updateTime, 1000);
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        window.onload = function() {
+            gameInterval = setInterval(createItem, itemSpawnRate);
+            timerInterval = setInterval(updateTime, 1000);
+        }
     </script>
 </body>
 </html>

@@ -42,10 +42,10 @@
     <main>
         <div class="conveyor-belt" id="conveyorBelt"></div>
         <div class="bins">
-            <div class="bin" id="plasticBin">Plastic</div>
-            <div class="bin" id="paperBin">Paper</div>
-            <div class="bin" id="metalBin">Metal</div>
-            <div class="bin" id="organicBin">Organic</div>
+            <div class="bin" id="plasticBin" data-type="plastic">Plastic</div>
+            <div class="bin" id="paperBin" data-type="paper">Paper</div>
+            <div class="bin" id="metalBin" data-type="metal">Metal</div>
+            <div class="bin" id="organicBin" data-type="organic">Organic</div>
         </div>
         <div id="score">Score: 0</div>
         <div id="timer">Time left: 60s</div>
@@ -61,10 +61,17 @@
         let score = 0;
         let itemSpeed = 2; // Initial speed in pixels per frame
         const items = [
-            { type: 'plastic', src: 'images/plastic.jpg' },
-            { type: 'paper', src: 'images/paper.jpg' },
-            { type: 'metal', src: 'images/metal.jpg' },
-            { type: 'organic', src: 'images/organic.jpg' }
+            { type: 'plastic', src: 'images/bag.png' },
+            { type: 'plastic', src: 'images/plastic-cup.png' },
+            { type: 'paper', src: 'images/newspaper.png' },
+            { type: 'paper', src: 'images/paper.png' },
+            { type: 'metal', src: 'images/bolt.png' },
+            { type: 'metal', src: 'images/chain (1).png' },
+            { type: 'metal', src: 'images/clip.png' },
+            { type: 'metal', src: 'images/steel.png' },
+            { type: 'organic', src: 'images/dried-fruits.png' },
+            { type: 'organic', src: 'images/durian.png' },
+            { type: 'organic', src: 'images/fruits.png' },
         ];
         let timeLeft = 60; // 1 minute timer
         let gameInterval;
@@ -147,7 +154,7 @@
                     draggedItem.remove();  // Remove the item from the conveyor belt
                     activeItems.delete(draggedItem);
 
-                    if (bin.id.includes(type)) {
+                    if (bin.dataset.type === type) {
                         score++;
                     } else {
                         score--;
