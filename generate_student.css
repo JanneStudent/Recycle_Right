@@ -1,0 +1,137 @@
+/* General Styles for Student Creation Page */
+body.student-creation-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #f9f9f9; /* Light background color */
+}
+
+/* Header Styles */
+header.student-creation-header {
+    background-color: #4CAF50; /* Match with existing green theme */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header.student-creation-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Main Content Styles */
+main.student-creation-main {
+    padding: 20px;
+}
+
+/* Section Styles */
+section.student-creation-section {
+    background-color: #ffffff; /* White background for sections */
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+section.student-creation-section h2 {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+/* Form Styles */
+.student-creation-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: auto;
+}
+
+.student-creation-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.student-creation-form input[type="text"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.student-creation-form button {
+    background-color: #4CAF50; /* Green background for buttons */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.student-creation-form button:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+}
+
+/* Table Styles */
+.student-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.student-list-table thead {
+    background-color: #4CAF50; /* Green background for table header */
+    color: white;
+}
+
+.student-list-table th, .student-list-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.student-list-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternating row colors */
+}
+
+/* Footer Styles */
+footer.student-creation-footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer.student-creation-footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .student-creation-form {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .student-list-table th, .student-list-table td {
+        padding: 8px;
+    }
+
+    header.student-creation-header h1 {
+        font-size: 20px;
+    }
+
+    section.student-creation-section {
+        padding: 15px;
+    }
+
+    footer.student-creation-footer p {
+        font-size: 12px;
+    }
+}
