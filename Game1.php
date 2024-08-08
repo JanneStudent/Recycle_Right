@@ -10,6 +10,8 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            margin: 0;
+            color: white; /* Set text color to white */
         }
         main {
             flex: 1;
@@ -20,6 +22,61 @@
             background-image: url('pictures/gameforest.jpg');
             background-size: cover;
             background-position: center;
+            position: relative;
+        }
+        .bins {
+            display: flex;
+            position: absolute;
+            bottom: 80px; /* Moved up from 20px to 80px */
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            color: white; /* Ensure bin text is white */
+        }
+        .bin {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            position: relative;
+            pointer-events: auto;
+            background-color: transparent; /* Remove the green background */
+            border: none; /* Remove any border */
+        }
+        .bin img {
+            width: 100%;  /* Ensure image fits the bin */
+            height: auto;
+        }
+        .bin-text {
+            margin-top: 5px;
+            text-align: center;
+            font-size: 18px; /* Ensure text size is readable */
+        }
+        #score, #timer {
+            font-size: 24px;
+            margin-top: 20px;
+            color: white; /* Ensure score and timer are white */
+        }
+        #gameOver {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            text-align: center;
+            color: black; /* Text inside game over is black for contrast */
+        }
+        .item {
+            width: 50px;
+            height: 50px;
+            position: absolute;
         }
     </style>
 </head>
@@ -42,10 +99,26 @@
     <main>
         <div class="conveyor-belt" id="conveyorBelt"></div>
         <div class="bins">
-            <div class="bin" id="plasticBin" data-type="plastic">Plastic</div>
-            <div class="bin" id="paperBin" data-type="paper">Paper</div>
-            <div class="bin" id="metalBin" data-type="metal">Metal</div>
-            <div class="bin" id="organicBin" data-type="organic">Organic</div>
+            <div class="bin" id="plasticBin" data-type="plastic">
+                <img src="images/bin.png" alt="Plastic Bin">
+                <div class="bin-text">Plastic</div>
+            </div>
+            <div class="bin" id="paperBin" data-type="paper">
+                <img src="images/bin.png" alt="Paper Bin">
+                <div class="bin-text">Paper</div>
+            </div>
+            <div class="bin" id="metalBin" data-type="metal">
+                <img src="images/bin.png" alt="Metal Bin">
+                <div class="bin-text">Metal</div>
+            </div>
+            <div class="bin" id="organicBin" data-type="organic">
+                <img src="images/bin.png" alt="Organic Bin">
+                <div class="bin-text">Organic</div>
+            </div>
+            <div class="bin" id="mixedBin" data-type="mixed">
+                <img src="images/bin.png" alt="mixed">
+                <div class="bin-text">Mixed Waste</div>
+            </div>
         </div>
         <div id="score">Score: 0</div>
         <div id="timer">Time left: 60s</div>
@@ -59,7 +132,7 @@
 
     <script>
         let score = 0;
-        let itemSpeed = 2; // Initial speed in pixels per frame
+        let itemSpeed = 2;
         const items = [
             { type: 'plastic', src: 'images/bag.png' },
             { type: 'plastic', src: 'images/plastic-cup.png' },
@@ -72,8 +145,11 @@
             { type: 'organic', src: 'images/dried-fruits.png' },
             { type: 'organic', src: 'images/durian.png' },
             { type: 'organic', src: 'images/fruits.png' },
+            { type: 'mixed', src: 'images/diaper.png' }, /* Mixed waste items */
+            { type: 'mixed', src: 'images/pen.png' },
+            { type: 'mixed', src: 'images/t-shirt.png' },
         ];
-        let timeLeft = 60; // 1 minute timer
+        let timeLeft = 60;
         let gameInterval;
         let timerInterval;
         const activeItems = new Set();
@@ -133,9 +209,8 @@
                 timeLeft--;
                 document.getElementById('timer').innerText = 'Time left: ' + timeLeft + 's';
 
-                // Increase item speed at specific times
                 if (timeLeft === 45 || timeLeft === 30 || timeLeft === 15) {
-                    itemSpeed *= 1.25; // Slow down the speed increase
+                    itemSpeed *= 1.25;
                 }
             }
         }

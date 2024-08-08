@@ -11,6 +11,7 @@
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
+            color: white; /* Set text color to white */
         }
         main {
             flex: 1;
@@ -26,9 +27,8 @@
         #gameArea {
             position: relative;
             width: 80%;
-            height: 80vh;
+            height: 100vh;
             overflow: hidden;
-            background: inherit;
             margin: 0 auto;
         }
         .item {
@@ -39,29 +39,39 @@
         .bins {
             display: flex;
             position: absolute;
-            bottom: 20px;
+            bottom: 80px; /* Position adjusted */
             left: 50%;
             transform: translateX(-50%);
             pointer-events: none;
         }
         .bin {
             width: 100px;
-            height: 100px;
-            border: 2px solid #000;
+            height: 120px; /* Adjusted height to make space for the text below */
             display: flex;
+            flex-direction: column; /* Ensures text is below the bin image */
             align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            border-radius: 5px;
+            justify-content: flex-end; /* Text is placed at the bottom */
             margin: 0 5px;
+            background-color: transparent;
+            position: relative;
+            text-align: center;
+            border: none;
         }
-        #score {
+        .bin img {
+            width: 100%;
+            height: auto;
+            pointer-events: none; /* Ensure images are not draggable */
+        }
+        .bin span {
+            margin-top: 5px;
+            color: white; /* Make text color white */
+            font-weight: bold;
+            z-index: 2; /* Ensure text is above the image */
+        }
+        #score, #timer {
             font-size: 24px;
             margin-top: 20px;
-        }
-        #timer {
-            font-size: 24px;
-            margin-top: 20px;
+            color: white; /* Ensure score and timer are white */
         }
         #gameOver {
             display: none;
@@ -74,6 +84,7 @@
             border: 2px solid #333;
             border-radius: 10px;
             text-align: center;
+            color: black; /* Text inside game over is black for contrast */
         }
     </style>
 </head>
@@ -96,10 +107,27 @@
     <main>
         <div id="gameArea"></div>
         <div class="bins" id="binsContainer">
-            <div class="bin" id="plasticBin" data-type="plastic">Plastic</div>
-            <div class="bin" id="paperBin" data-type="paper">Paper</div>
-            <div class="bin" id="metalBin" data-type="metal">Metal</div>
-            <div class="bin" id="organicBin" data-type="organic">Organic</div>
+            <div class="bin" id="plasticBin" data-type="plastic">
+                <img src="images/bin.png" alt="Plastic Bin">
+                <span>Plastic</span>
+            </div>
+            <div class="bin" id="paperBin" data-type="paper">
+                <img src="images/bin.png" alt="Paper Bin">
+                <span>Paper</span>
+            </div>
+            <div class="bin" id="metalBin" data-type="metal">
+                <img src="images/bin.png" alt="Metal Bin">
+                <span>Metal</span>
+            </div>
+            <div class="bin" id="organicBin" data-type="organic">
+                <img src="images/bin.png" alt="Organic Bin">
+                <span>Organic</span>
+            </div>
+            <!-- New Mixed Waste Bin -->
+            <div class="bin" id="mixedWasteBin" data-type="mixed">
+                <img src="images/bin.png" alt="Mixed Waste Bin">
+                <span>Mixed</span>
+            </div>
         </div>
         <div id="score">Score: 0</div>
         <div id="timer">Time left: 60s</div>
@@ -126,6 +154,10 @@
             { type: 'organic', src: 'images/dried-fruits.png' },
             { type: 'organic', src: 'images/durian.png' },
             { type: 'organic', src: 'images/fruits.png' },
+            // New Mixed Waste Items
+            { type: 'mixed', src: 'images/diaper.png' },
+            { type: 'mixed', src: 'images/pen.png' },
+            { type: 'mixed', src: 'images/t-shirt.png' },
         ];
         let timeLeft = 60;
         let gameInterval;

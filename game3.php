@@ -11,6 +11,7 @@
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
+            color: white; /* Ensure text color is white */
         }
         main {
             flex: 1;
@@ -28,7 +29,6 @@
             width: 80%;
             height: 80vh;
             overflow: hidden;
-            background: inherit;
             margin: 0 auto;
         }
         .item {
@@ -39,22 +39,21 @@
         .garbage-can {
             width: 100px;
             height: 100px;
-            border: 2px solid #000;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.8); /* Slight transparency */
             border-radius: 5px;
             position: absolute;
             pointer-events: none;
+            text-align: center;
+            font-weight: bold;
+            color: black; /* Ensure contrast with white background */
         }
-        #score {
+        #score, #timer {
             font-size: 24px;
             margin-top: 20px;
-        }
-        #timer {
-            font-size: 24px;
-            margin-top: 20px;
+            color: white; /* Set score and timer text color to white */
         }
         #gameOver {
             display: none;
@@ -67,6 +66,7 @@
             border: 2px solid #333;
             border-radius: 10px;
             text-align: center;
+            color: black; /* Text inside game over is black for contrast */
         }
     </style>
 </head>
@@ -118,6 +118,10 @@
             { type: 'organic', src: 'images/dried-fruits.png' },
             { type: 'organic', src: 'images/durian.png' },
             { type: 'organic', src: 'images/fruits.png' },
+            // New Mixed Waste Items
+            { type: 'mixed', src: 'images/diaper.png' },
+            { type: 'mixed', src: 'images/pen.png' },
+            { type: 'mixed', src: 'images/t-shirt.png' },
         ];
         let gameInterval;
         let timerInterval;
@@ -188,7 +192,7 @@
         });
 
         function switchGarbageCan() {
-            const types = ['plastic', 'paper', 'metal', 'organic'];
+            const types = ['plastic', 'paper', 'metal', 'organic', 'mixed']; // Added 'mixed' type
             let nextType;
             do {
                 nextType = types[Math.floor(Math.random() * types.length)];
